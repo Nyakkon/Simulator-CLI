@@ -138,7 +138,7 @@ Lỗi này xảy ra khi các biến môi trường chưa được thiết lập 
 2. Chọn **Hệ thống và bảo mật** > **Hệ thống** > **Cài đặt hệ thống nâng cao**.
 3. Trong **Thuộc tính hệ thống**, nhấp vào **Biến môi trường**.
 4. Chỉnh sửa biến **Đường dẫn** trong **Biến hệ thống** và thêm `C:\Windows\Software\QORE`.
-5. Khởi động lại dấu nhắc lệnh và nhập `QORE -list` để xác nhận thiết lập.
+5. Khởi động lại dấu nhắc lệnh và nhập `QORE -version` để xác nhận thiết lập.
 
 ### Sửa lỗi thủ công các sự cố liên quan đến sổ đăng ký
 Nếu bạn gặp sự cố liên quan đến sổ đăng ký hệ thống khi thiết lập môi trường, hãy làm theo các bước sau:
