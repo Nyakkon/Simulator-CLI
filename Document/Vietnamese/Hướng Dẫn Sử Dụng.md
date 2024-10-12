@@ -30,4 +30,4 @@
 
 ## Bước 3: Kiểm Tra
 
-- Mở Command Prompt (CMD) và nhập lệnh `QORE -list` để kiểm tra xem công cụ đã được cài đặt thành công.
+- Mở Command Prompt (CMD) và nhập lệnh `QORE -version` để kiểm tra xem công cụ đã được cài đặt thành công.
