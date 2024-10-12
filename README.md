@@ -16,9 +16,10 @@ Simulator-CLI is an open-source command-line interface tool designed for automat
 
 ---
 
-## 📚 Documentation and Resources
-- **Code Breakdown**: Detailed explanations and code operation manuals are available in the [Code Breakdown](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document).
-- **Usage Instructions**: How to set up and use the Simulator-CLI tool.
+## 📚 [Documentation and Resources](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document)
+- [This Resource Is Used By Default In English, You Can View Vietnamese Resource By Clicking](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document/Vietnamese)
+- **Code Breakdown**: Detailed explanations and code operation manuals are available in the [Code Breakdown](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/English/Code%20Breakdown.md).
+- **Usage Instructions**: How to set up and use the Simulator-CLI tool [Usage Instructions](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/English/How%20To%20Use.md).
 - **Problem List**: A list of potential issues and fixes, also included in [Problem List](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document).
 
 ---
