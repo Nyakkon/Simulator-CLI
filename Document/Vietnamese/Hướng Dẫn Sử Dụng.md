@@ -17,7 +17,7 @@
 
    **Hình ảnh minh họa:**
 
-   ![Thiết lập System Variable](image_path_system_variable.png)
+   ![Thiết lập System Variable]([image_path_system_variable.png](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Resources/image_path_system_variable.png))
 
 ### Thiết Lập User Variable
 1. Tương tự như trên, trong hộp thoại **Environment Variables**, cuộn xuống **User Variables**.
