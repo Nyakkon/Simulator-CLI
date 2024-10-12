@@ -26,7 +26,7 @@
 
    **Hình ảnh minh họa:**
 
-   ![Thiết lập User Variable](image_path_user_variable.png)
+   ![Thiết lập User Variable](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Resources/image_path_user_variable.png)
 
 ## Bước 3: Kiểm Tra
 
