@@ -1,85 +1,137 @@
 
-# QORE CLI Application
+# **README (English)**
 
-## Overview
+## **Introduction**
+The CLI "QORE" is a command-line application (CLI) that helps manage and automate tasks by running `.bat` files through XML configuration. It supports commands from XML files and configurations from the `cnf.ini` file, allowing users to create custom commands based on the project's requirements.
 
-This script is a command-line interface (CLI) tool for managing and automating tasks in a system. It uses configuration files in XML and `.ini` formats, which are placed in the folder `C:\Windows\Software\QORE`. The tool allows executing `.bat` scripts, setting system environment variables, and provides a list of available commands.
+### **Project Structure**
+```
+C:\Windows\Software\QORE\
+    ├── cmd/               # Contains .bat files
+    ├── env/               # Contains the cnf.ini configuration file
+    ├── XML/               # Contains XML files defining commands
+    └── main.py            # Main Python file to handle the CLI
+```
 
-### Code Breakdown
+---
 
-#### 1. `load_command_descriptions()`
-This function loads command descriptions from the file `C:\Windows\Software\QORE\env\cnf.ini`.
+## **Detailed explanation of each part of the code**
 
-- **Purpose:** Reads commands defined in the `.ini` file that describes each command's functionality.
-- **Implementation:**
-    - Reads the `cnf.ini` file using Python's `configparser` module.
-    - Returns the dictionary of commands found in the `[commands]` section.
-    - Handles errors in case the `.ini` file or the commands section doesn't exist.
+### **1. Loading command descriptions from `cnf.ini`**
 
-#### 2. `is_valid_name(name)`
-This function checks whether a given name contains valid characters (letters, numbers, dashes, and underscores).
+```python
+def load_command_descriptions():
+    '''Read command definitions from C:\Windows\Software\QORE\env\cnf.ini'''
+    config = configparser.ConfigParser()
+    cnf_path = r'C:\Windows\Software\QORE\env\cnf.ini'
+```
 
-- **Purpose:** To ensure that only valid command names are used.
-- **Implementation:**
-    - Uses regular expressions to match against the allowed characters.
+- **Purpose:** This function reads command definitions from the `cnf.ini` file, which is located in the `env` folder. The function checks if the `cnf.ini` file exists and then retrieves the command descriptions from the `[commands]` section in the file.
 
-#### 3. `parse_xml(file_path)`
-This function parses an XML file to extract the command name, description, and path to a `.bat` file.
+```python
+if os.path.exists(cnf_path):
+    with open(cnf_path, 'r', encoding='utf-8') as configfile:
+        config.read_file(configfile)
+    if 'commands' in config:
+        return config['commands']
+    else:
+        print("Err: 'commands' section not found in cnf.ini file")
+        return {}
+else:
+    print(f"Err: cnf.ini file not found at {cnf_path}")
+    return {}
+```
 
-- **Purpose:** To read the XML files in the `C:\Windows\Software\QORE\XML` folder, containing details about each command.
-- **Implementation:**
-    - Extracts the `Name`, `Description`, and the path to the `.bat` file (`DatFilePath`).
-    - Constructs the path to the `cmd` folder where `.bat` files are stored.
+- **Operation:** If the `cnf.ini` file is not found, the function will return an error message. If the file exists, it reads and returns the commands defined in the configuration file.
 
-#### 4. `get_names_from_xml_folder()`
-This function loops through all the XML files in the `C:\Windows\Software\QORE\XML` folder to generate a dictionary of valid command names.
+### **2. Checking for valid command names**
 
-- **Purpose:** Collects commands from XML files, and checks whether they are valid by calling `is_valid_name()`.
-- **Implementation:**
-    - Reads all XML files in the folder and parses their content.
-    - Only adds valid commands to the list.
+```python
+def is_valid_name(name):
+    '''Check for valid names, only containing letters, numbers, and hyphens'''
+    return re.match(r'^[a-zA-Z0-9-_]+$', name) is not None
+```
 
-#### 5. `run_bat_from_name(dat_file)`
-This function executes the `.bat` file corresponding to the selected command.
+- **Purpose:** This function checks if the command name is valid. A valid command name contains only letters, numbers, and hyphens.
 
-- **Purpose:** To run the `.bat` file for each command.
-- **Implementation:**
-    - Converts the relative path to an absolute path.
-    - Uses `os.system()` to call the `.bat` file.
+### **3. Parsing XML Files**
 
-#### 6. `print_command_help(names_from_xml, command_descriptions)`
-This function prints all available commands along with their descriptions.
+```python
+def parse_xml(file_path):
+    '''Read XML file and return Name, Description, and .bat file path'''
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+```
 
-- **Purpose:** Provides a list of commands from both the `.ini` and XML files.
-- **Implementation:**
-    - Outputs all commands defined in the `cnf.ini` file.
-    - Outputs all commands from the XML folder.
+- **Purpose:** This function reads the XML configuration files and extracts the command `Name`, `Description`, and the path to the `.bat` file that needs to be run. 
 
-#### 7. `fix_problem()`
-This function ensures the necessary folders (`XML` and `cmd`) exist.
+```python
+name = root.find('Name').text if root.find('Name') is not None else 'N/A'
+description = root.find('Description').text if root.find('Description') is not None else 'N/A'
+dat_path = root.find('DatFilePath').text if root.find('DatFilePath') is not None else 'N/A'
+dat_path = os.path.join(r'C:\Windows\Software\QORE\cmd', dat_path)
+return name, description, dat_path
+```
 
-- **Purpose:** Ensures that the script can create and store files in the correct directories.
-- **Implementation:**
-    - Checks if the folders exist and creates them if not.
+- **Operation:** If certain fields such as `Name` or `Description` are missing, it assigns them a default value of `N/A`. It also constructs the full path to the `.bat` file.
 
-#### 8. `set_system_environment()`
-This function adds the path to the `QORE` folder to the system's environment variable `PATH`.
+### **4. Getting Commands from XML Directory**
 
-- **Purpose:** To allow the `QORE` commands to be called from any directory in the command line.
-- **Implementation:**
-    - Opens the Windows Registry to modify the `PATH` variable.
+```python
+def get_names_from_xml_folder():
+    '''Iterate through XML files in the folder and return list of command names'''
+    xml_folder = r'C:\Windows\Software\QORE\XML'
+    names = {}
+```
 
-#### 9. `clean_path()`
-This function cleans up the system's `PATH` by removing duplicate or invalid entries.
+- **Purpose:** This function looks into the `XML` folder to retrieve the available commands, checking if the folder exists and processing the `.xml` files in that directory.
 
-- **Purpose:** To ensure the `PATH` variable is properly formatted.
-- **Implementation:**
-    - Opens the Windows Registry and removes any redundant characters from the `PATH`.
+### **5. Running `.bat` Files from Command Names**
 
-#### 10. `main()`
-This is the main function that coordinates the other functions based on command-line arguments.
+```python
+def run_bat_from_name(dat_file):
+    '''Execute the corresponding .bat file'''
+    full_path = os.path.abspath(dat_file)
+    if os.path.exists(full_path):
+        os.system(f'call {full_path}')
+    else:
+        print(f"Err: .bat file {full_path} does not exist (x9338)")
+```
 
-- **Purpose:** It serves as the entry point of the script.
-- **Implementation:**
-    - Handles command-line options using `argparse`.
-    - Supports listing commands, setting the environment, fixing folder issues, and running `.bat` files.
+- **Purpose:** This function runs the `.bat` file associated with a command. It checks if the file exists before trying to execute it.
+
+### **6. Main Function**
+
+```python
+def main():
+    command_descriptions = load_command_descriptions()
+    names_from_xml = get_names_from_xml_folder()
+    parser = argparse.ArgumentParser(description="QORE - CLI application for task management and automation.")
+    parser.add_argument('-version', action='version', version='App 1.0')
+    parser.add_argument('-list', action='store_true', help="Browse and print information from XML files")
+    parser.add_argument('-fix-problem', action='store_true', help="Check and create XML and cmd directories if missing")
+    parser.add_argument('-set-env', action='store_true', help="Set the QORE environment variables for CMD")
+```
+
+- **Purpose:** The main function initializes the CLI and handles user arguments, invoking the right functions to process the commands.
+
+```python
+for name in names_from_xml.keys():
+    parser.add_argument(f'-{name}', action='store_true', help=f"Run the .bat file from {name}")
+
+args = parser.parse_args()
+
+if args.fix_problem:
+    fix_problem()
+if args.set_env:
+    set_system_environment()
+    clean_path()
+if args.list:
+    print_command_help(names_from_xml, command_descriptions)
+for name, (_, dat_path) in names_from_xml.items():
+    if getattr(args, name):
+        run_bat_from_name(dat_path)
+```
+
+- **Operation:** The function checks for user-provided options and then either lists available commands, runs the associated `.bat` files, or sets up environment variables.
+
