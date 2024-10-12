@@ -138,7 +138,7 @@ This error occurs when the environment variables have not been properly set, or 
 2. Select **System and Security** > **System** > **Advanced System Settings**.
 3. In **System Properties**, click **Environment Variables**.
 4. Edit the **Path** variable in **System Variables** and add `C:\Windows\Software\QORE`.
-5. Restart your command prompt and type `QORE -list` to confirm the setup.
+5. Restart your command prompt and type `QORE -version` to confirm the setup.
 
 ### Manually Fixing Registry Issues
 If you encounter issues related to the system registry when setting the environment, follow these steps:
