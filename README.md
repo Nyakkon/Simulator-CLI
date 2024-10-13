@@ -21,7 +21,7 @@
 ## 🌟 Code Links
 - [Check the code](https://github.com/Nyakkon/Simulator-CLI/blob/main/main.py)
 - [Declaration of Rights and Responsibilities](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Declaration%20of%20Rights%20and%20Responsibilities.md)
-- [Download Simulator-CLI](https://github.com/Nyakkon/Simulator-CLI/releases/download/1.0.0/Simulator-CLI.ver.1.0.0.zip)
+- [Download Simulator-CLI](https://github.com/Nyakkon/Simulator-CLI/releases/download/1.0.1/Simulator-CLI.ver.1.0.1.zip)
 
 ---
 
