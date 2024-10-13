@@ -24,13 +24,12 @@ def load_command_descriptions():
         print(f"Err: Không tìm thấy tệp cnf.ini tại {cnf_path}")
         return {}
 
-
 def is_valid_name(name):
     """Kiểm tra tên hợp lệ, chỉ chứa chữ cái, số, và dấu gạch ngang"""
     return re.match(r'^[a-zA-Z0-9\-_]+$', name) is not None
 
 def parse_xml(file_path):
-    """Đọc file XML và trả về Name, Description, DatFilePath, và Type"""
+    """Đọc file XML và trả về Name, Description, và đường dẫn file .bat"""
     tree = ET.parse(file_path)
     root = tree.getroot()
 
@@ -38,17 +37,11 @@ def parse_xml(file_path):
     name = root.find('Name').text if root.find('Name') is not None else 'N/A'
     description = root.find('Description').text if root.find('Description') is not None else 'N/A'
     dat_path = root.find('DatFilePath').text if root.find('DatFilePath') is not None else 'N/A'
-    file_type = root.find('Type').text if root.find('Type') is not None else '0'  # Default to Type 0 if not found
 
     # Tạo đường dẫn tới file .bat trong thư mục 'cmd'
     dat_path = os.path.join(r'C:\Windows\Software\QORE\cmd', dat_path)  # Đường dẫn tuyệt đối tới 'cmd'
-
-    # Xử lý logic cho Type
-    if file_type == '1':
-        name = f"{name}.py -test\"hjghksfdc\""
     
     return name, description, dat_path
-
 
 def get_names_from_xml_folder():
     """Duyệt qua các file XML trong thư mục 'XML' và trả về danh sách các tên từ thẻ 'Name'"""
@@ -156,10 +149,9 @@ def main():
 
     # Thêm tùy chọn -set-env để thiết lập biến môi trường hệ thống
     parser.add_argument('-set-env', action='store_true', help="Thiết lập biến môi trường QORE để gọi từ CMD")
-    
-    # Thêm tùy chọn tự động dựa trên thẻ 'Name' từ XML
-    for name in names_from_xml.keys():
-        parser.add_argument(f'-{name}', action='store_true', help=f"Chạy file .bat từ {name}")
+
+    # Thêm tùy chọn để cho phép các đối số CLI tùy chỉnh
+    parser.add_argument('-custom_cli_in_xml', type=str, help="Thực thi lệnh tùy chỉnh CLI với chuỗi người dùng truyền vào.")
 
     # Parse các tham số dòng lệnh
     args = parser.parse_args()
@@ -177,6 +169,11 @@ def main():
     if args.list:
         print_command_help(names_from_xml, command_descriptions)
     
+    # Kiểm tra và chạy lệnh tùy chỉnh CLI nếu tham số được cung cấp
+    if args.custom_cli_in_xml:
+        print(f"Executing custom CLI command with argument: {args.custom_cli_in_xml}")
+        # Run any custom logic or process here based on args.custom_cli_in_xml
+
     # Kiểm tra và chạy file .bat tương ứng nếu tham số được cung cấp
     for name, (_, dat_path) in names_from_xml.items():
         if getattr(args, name):

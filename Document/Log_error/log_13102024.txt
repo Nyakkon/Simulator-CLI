@@ -1,0 +1,97 @@
+Lỗi ghi nhận: (x3801)
+PS D:\Users\Desktop\Testing\Develop\Qore> python main.py -add_command -command_name test111 -command_sub abc def -description "Lệnh kiểm tra" -bat abc.bat def.bat
+D:\Users\Desktop\Testing\Develop\Qore\main.py:9: SyntaxWarning: invalid escape sequence '\W'
+"""Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+usage: main.py [-h] [-version] [-list] [-fix-problem] [-set-env] [-interface] [-map_wk]
+main.py: error: unrecognized arguments: -add_command -command_name test111 -command_sub abc def -description Lệnh kiểm tra -bat abc.bat def.bat
+
+Lỗi ghi nhận: (x3801)
+PS D:\Users\Desktop\Testing\Develop\Qore> python test.py -list"test"
+D:\Users\Desktop\Testing\Develop\Qore\test.py:9: SyntaxWarning: invalid escape sequence '\W'
+  """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+usage: test.py [-h] [-version] [-list] [-fix-problem] [-set-env] [-interface] [-map_wk]
+test.py: error: unrecognized arguments: -listtest
+
+Lỗi ghi nhận: (x3212)
+D:\Users\Desktop\Testing\Develop\Qore\test.py:9: SyntaxWarning: invalid escape sequence '\W'
+  """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+Err: Tham số 'test.py -test"hjghksfdc"' không hợp lệ, bỏ qua file test.xml với tham số là 'test.py -test"hjghksfdc"'. Mã: [x3902]
+Options (and corresponding environment variables):
+-list      : In ra danh sách tất cả các lệnh
+-version      : Phiên bản ứng dụng
+-set-env      : Thiết lập môi trường
+-fix-problem      : Sửa lỗi
+-interface      : Xem Interface Wifi
+-map_wk      : Chạy Modmap Wukong
+
+
+Lỗi ghi nhận: (x3801)
+PS D:\Users\Desktop\Testing\Develop\Qore> python test.py -test"test"
+D:\Users\Desktop\Testing\Develop\Qore\test.py:9: SyntaxWarning: invalid escape sequence '\W'
+  """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+D:\Users\Desktop\Testing\Develop\Qore\test.py:31: SyntaxWarning: invalid escape sequence '\W'
+  """Lưu chuỗi test vào tệp temp.ini trong thư mục C:\Windows\Software\QORE\env"""
+Err: Tham số 'test.py -test"hjghksfdc"' không hợp lệ, bỏ qua file test.xml với tham số là 'test.py -test"hjghksfdc"'. Mã: [x3902]
+usage: test.py [-h] [-version] [-list] [-fix-problem] [-set-env] [-test TEST] [-interface] [-map_wk]
+test.py: error: unrecognized arguments: -testtest
+
+
+
+Lỗi ghi nhận: (NULL - chưa phân loại)
+PS D:\Users\Desktop\Testing\Develop\Qore> python test.py -test"test"
+D:\Users\Desktop\Testing\Develop\Qore\test.py:9: SyntaxWarning: invalid escape sequence '\W'
+  """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+D:\Users\Desktop\Testing\Develop\Qore\test.py:31: SyntaxWarning: invalid escape sequence '\W'
+  """Lưu chuỗi test vào tệp temp.ini trong thư mục C:\Windows\Software\QORE\env"""
+Traceback (most recent call last):
+  File "D:\Users\Desktop\Testing\Develop\Qore\test.py", line 172, in <module>
+    main()
+  File "D:\Users\Desktop\Testing\Develop\Qore\test.py", line 144, in main
+    parser.add_argument(f'-{name}', action='store_true', help=f"Chạy file .bat từ {name}")
+  File "C:\Program Files\Python312\Lib\argparse.py", line 1495, in add_argument
+    return self._add_action(action)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\argparse.py", line 1877, in _add_action
+    self._optionals._add_action(action)
+  File "C:\Program Files\Python312\Lib\argparse.py", line 1697, in _add_action
+    action = super(_ArgumentGroup, self)._add_action(action)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\argparse.py", line 1509, in _add_action
+    self._check_conflict(action)
+  File "C:\Program Files\Python312\Lib\argparse.py", line 1646, in _check_conflict
+    conflict_handler(action, confl_optionals)
+  File "C:\Program Files\Python312\Lib\argparse.py", line 1655, in _handle_conflict_error
+    raise ArgumentError(action, message % conflict_string)
+argparse.ArgumentError: argument -test: conflicting option string: -test
+
+
+Lỗi ghi nhận: (x3801)
+PS D:\Users\Desktop\Testing\Develop\Qore> python test.py -test"test"
+D:\Users\Desktop\Testing\Develop\Qore\test.py:9: SyntaxWarning: invalid escape sequence '\W'
+  """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+D:\Users\Desktop\Testing\Develop\Qore\test.py:31: SyntaxWarning: invalid escape sequence '\W'
+  """Lưu chuỗi test vào tệp temp.ini trong thư mục C:\Windows\Software\QORE\env"""
+Err: Tham số 'test -test "some_string"' không hợp lệ, bỏ qua file test.xml với tham số là 'test -test "some_string"'. Mã: [x3902]
+usage: test.py [-h] [-version] [-list] [-fix-problem] [-set-env] [-test TEST] [-interface] [-map_wk]
+test.py: error: unrecognized arguments: -testtest
+
+
+Lỗi ghi nhận: (x3802)
+PS D:\Users\Desktop\Testing\Develop\Qore> python test.py -list      
+D:\Users\Desktop\Testing\Develop\Qore\test.py:9: SyntaxWarning: invalid escape sequence '\W'
+  """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+Options (and corresponding environment variables):
+-list      : In ra danh sách tất cả các lệnh
+-version      : Phiên bản ứng dụng
+-set-env      : Thiết lập môi trường
+-fix-problem      : Sửa lỗi
+-interface      : Xem Interface Wifi
+-map_wk      : Chạy Modmap Wukong
+-test      : Chạy file test
+Traceback (most recent call last):
+  File "D:\Users\Desktop\Testing\Develop\Qore\test.py", line 183, in <module>
+    main()
+  File "D:\Users\Desktop\Testing\Develop\Qore\test.py", line 179, in main
+    if getattr(args, name):
+       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Namespace' object has no attribute 'interface'
