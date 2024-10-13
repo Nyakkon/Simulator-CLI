@@ -1,1 +1,9 @@
+[VERSION 1.0.0]
+Tuỳ chỉnh CLI Cơ Bản
 
+[VERSION 1.0.1]
+FIX Lổi Hệ Thống Không Nhận Được Cấu Hình Enviroment Dù Đã Thêm Path
+FIX Lỗi Vòng Lặp
+UPDATE -custome "my_string" với type trong xml là 1
+UPDATE -custome với type trong xml là 0
+Chỉnh sửa lại cấu hình cơ bản
