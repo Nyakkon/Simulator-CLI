@@ -1,5 +1,3 @@
-Here’s a sample README file based on the error codes you provided:
-
 ```markdown
 # Project Name: Qore Command-Line Tool
 
