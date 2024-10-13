@@ -68,7 +68,7 @@ python test.py -version
 - Invalid escape sequences: Use raw strings for paths to avoid warnings.
 
 ## Contact
-For any issues or support, please contact the development team at support@qoreapp.com.
+For any issues or support, please contact the development team at admin@wibu.me.
 
 ```
 
