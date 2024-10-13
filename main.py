@@ -6,7 +6,7 @@ import re
 import configparser
 
 def load_command_descriptions():
-    """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
+    r"""Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
     config = configparser.ConfigParser()
     cnf_path = r'C:\Windows\Software\QORE\env\cnf.ini'
 
@@ -24,13 +24,12 @@ def load_command_descriptions():
         print(f"Err: Không tìm thấy tệp cnf.ini tại {cnf_path}")
         return {}
 
-
 def is_valid_name(name):
     """Kiểm tra tên hợp lệ, chỉ chứa chữ cái, số, và dấu gạch ngang"""
     return re.match(r'^[a-zA-Z0-9\-_]+$', name) is not None
 
 def parse_xml(file_path):
-    """Đọc file XML và trả về Name, Description, DatFilePath, và Type"""
+    """Đọc file XML và trả về Name, Description, và đường dẫn file .bat"""
     tree = ET.parse(file_path)
     root = tree.getroot()
 
@@ -38,17 +37,11 @@ def parse_xml(file_path):
     name = root.find('Name').text if root.find('Name') is not None else 'N/A'
     description = root.find('Description').text if root.find('Description') is not None else 'N/A'
     dat_path = root.find('DatFilePath').text if root.find('DatFilePath') is not None else 'N/A'
-    file_type = root.find('Type').text if root.find('Type') is not None else '0'  # Default to Type 0 if not found
 
     # Tạo đường dẫn tới file .bat trong thư mục 'cmd'
-    dat_path = os.path.join(r'C:\Windows\Software\QORE\cmd', dat_path)  # Đường dẫn tuyệt đối tới 'cmd'
-
-    # Xử lý logic cho Type
-    if file_type == '1':
-        name = f"{name}.py -test\"hjghksfdc\""
+    dat_path = os.path.join(r'C:\Windows\Software\QORE\cmd', os.path.basename(dat_path))  # Chỉ giữ tên file và ghép với đường dẫn cmd
     
     return name, description, dat_path
-
 
 def get_names_from_xml_folder():
     """Duyệt qua các file XML trong thư mục 'XML' và trả về danh sách các tên từ thẻ 'Name'"""
@@ -73,15 +66,19 @@ def get_names_from_xml_folder():
                 else:
                     print(f"Err: Tham số '{name}' không hợp lệ, bỏ qua file {xml_file} với tham số là '{name}'. Mã: [x3902]")
             except Exception as e:
-                print(f"Err: Không thể xử lý tệp XML. Lỗi: [x9320]")
+                print(f"Err: Không thể xử lý tệp XML. Lỗi: {e}")
     return names
 
-def run_bat_from_name(dat_file):
-    """Thực thi file .bat tương ứng với tên đã chọn"""
+def run_bat_from_name(dat_file, custom_string=None):
+    r"""Thực thi file .bat từ thư mục C:\Windows\Software\QORE\cmd với chuỗi tùy chỉnh"""
     full_path = os.path.abspath(dat_file)  # Lấy đường dẫn tuyệt đối
     
     if os.path.exists(full_path):
-        os.system(f'call {full_path}')
+        # Chạy file .bat kèm theo custom string của người dùng nếu có
+        if custom_string:
+            os.system(f'call "{full_path}" {custom_string}')
+        else:
+            os.system(f'call "{full_path}"')
     else:
         print(f"Err: File .bat {full_path} không tồn tại (x9338)")
 
@@ -159,7 +156,7 @@ def main():
     
     # Thêm tùy chọn tự động dựa trên thẻ 'Name' từ XML
     for name in names_from_xml.keys():
-        parser.add_argument(f'-{name}', action='store_true', help=f"Chạy file .bat từ {name}")
+        parser.add_argument(f'-{name}', type=str, nargs='?', help=f"Chạy file .bat từ {name} với một chuỗi tùy chỉnh")
 
     # Parse các tham số dòng lệnh
     args = parser.parse_args()
@@ -177,10 +174,11 @@ def main():
     if args.list:
         print_command_help(names_from_xml, command_descriptions)
     
-    # Kiểm tra và chạy file .bat tương ứng nếu tham số được cung cấp
+    # Kiểm tra và chạy file .bat tương ứng nếu tham số được cung cấp, kèm theo custom string nếu có
     for name, (_, dat_path) in names_from_xml.items():
         if getattr(args, name):
-            run_bat_from_name(dat_path)
+            custom_string = getattr(args, name)
+            run_bat_from_name(dat_path, custom_string)
 
 if __name__ == '__main__':
     main()

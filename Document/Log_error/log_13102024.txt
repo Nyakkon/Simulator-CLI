@@ -95,3 +95,9 @@ Traceback (most recent call last):
     if getattr(args, name):
        ^^^^^^^^^^^^^^^^^^^
 AttributeError: 'Namespace' object has no attribute 'interface'
+
+Lỗi ghi nhận: (Không ghi String ra màn hình)
+PS D:\Users\Desktop\Testing\Develop\Qore> python test.py -test1 "test"
+D:\Users\Desktop\Testing\Develop\Qore\test.py:67: SyntaxWarning: invalid escape sequence '\W'
+  """Thực thi file .bat từ thư mục C:\Windows\Software\QORE\cmd với chuỗi tùy chỉnh"""
+Press any key to continue . . . 

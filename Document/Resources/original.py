@@ -24,6 +24,7 @@ def load_command_descriptions():
         print(f"Err: Không tìm thấy tệp cnf.ini tại {cnf_path}")
         return {}
 
+
 def is_valid_name(name):
     """Kiểm tra tên hợp lệ, chỉ chứa chữ cái, số, và dấu gạch ngang"""
     return re.match(r'^[a-zA-Z0-9\-_]+$', name) is not None
@@ -149,9 +150,10 @@ def main():
 
     # Thêm tùy chọn -set-env để thiết lập biến môi trường hệ thống
     parser.add_argument('-set-env', action='store_true', help="Thiết lập biến môi trường QORE để gọi từ CMD")
-
-    # Thêm tùy chọn để cho phép các đối số CLI tùy chỉnh
-    parser.add_argument('-custom_cli_in_xml', type=str, help="Thực thi lệnh tùy chỉnh CLI với chuỗi người dùng truyền vào.")
+    
+    # Thêm tùy chọn tự động dựa trên thẻ 'Name' từ XML
+    for name in names_from_xml.keys():
+        parser.add_argument(f'-{name}', action='store_true', help=f"Chạy file .bat từ {name}")
 
     # Parse các tham số dòng lệnh
     args = parser.parse_args()
@@ -169,11 +171,6 @@ def main():
     if args.list:
         print_command_help(names_from_xml, command_descriptions)
     
-    # Kiểm tra và chạy lệnh tùy chỉnh CLI nếu tham số được cung cấp
-    if args.custom_cli_in_xml:
-        print(f"Executing custom CLI command with argument: {args.custom_cli_in_xml}")
-        # Run any custom logic or process here based on args.custom_cli_in_xml
-
     # Kiểm tra và chạy file .bat tương ứng nếu tham số được cung cấp
     for name, (_, dat_path) in names_from_xml.items():
         if getattr(args, name):
