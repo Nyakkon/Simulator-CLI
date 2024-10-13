@@ -184,6 +184,9 @@ def main():
     
     parser.add_argument('-notification', action='store_true', help="Thông Báo")
     
+    parser.add_argument('-error', action='store_true', help="lỗi từ local")
+    parser.add_argument('-error-log-from-public-source', action='store_true', help="lỗi từ nguồn tổng")
+    
     # Thêm tùy chọn -log-update để thiết lập biến môi trường hệ thống
     parser.add_argument('-changelog', action='store_true', help="Thông tin cập nhật")
     
@@ -215,9 +218,32 @@ def main():
         except requests.exceptions.RequestException as e:
             print(f"Error fetching the changelog: {e}")
             
-    url = "https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Log_error/log.txt"
+
+    
+    if args.error_log_from_public_source:
+        url = "https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Log_error/log.txt"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Check for request errors
+
+            # Print the content of the changelog
+            print(response.text)
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching the changelog: {e}")
 
     # Nếu -list được cung cấp, in ra danh sách Name và Description từ XML
+    if args.error:
+        log_file_path = r"C:\Windows\Software\QORE\log\error_log.txt"
+        try:
+            # Open and read the log file
+            with open(log_file_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                print(content)  # Print the content to the console
+        except FileNotFoundError:
+            print(f"File {log_file_path} not found.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        
     if args.list:
         print_command_help(names_from_xml, command_descriptions)
     
