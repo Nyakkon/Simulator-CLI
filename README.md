@@ -30,7 +30,7 @@
 - [Vietnamese Resource](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document/Vietnamese)
 - **[Code Breakdown](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/English/Code%20Breakdown.md)**: Detailed explanation and operation guide.
 - **[Usage Instructions](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/English/Usage%20Instructions.md)**: How to set up and use the Simulator-CLI.
-- **[Problem List](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document)**: Common issues and solutions.
+- **[Problem List](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/English/Problem%20List.md)**: Common issues and solutions.
 
 ---
 
@@ -42,6 +42,13 @@ Join our growing community to share your thoughts, ideas, and improvements!
 
 ## 🎉 Releases
 Stay updated with the latest features and improvements by visiting our [Release Page](https://github.com/Nyakkon/Simulator-CLI/releases/).
+
+---
+
+## 🖼️ Screenshot Reference:
+Here's a reference image of the Simulator-CLI in action:
+
+![Simulator CLI Screenshot](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Resources/Screenshot%202024-10-13%20103913.png)
 
 ---
 
@@ -57,6 +64,15 @@ This project is licensed under the MIT License. For more details, visit the [MIT
 
 ## 🔐 Security Policy
 For any security concerns or issues, please refer to our [Security Policy](https://github.com/Nyakkon/.github/blob/main/SECURITY.md).
+
+---
+
+## 🛠️ Common Errors Support:
+We provide detailed support for common errors that users may encounter:  
+- [Common Errors](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document/Error)  
+
+For recorded error logs, check:  
+- [Error Logs](https://github.com/Nyakkon/Simulator-CLI/tree/main/Document/Log_error)
 
 ---
 
