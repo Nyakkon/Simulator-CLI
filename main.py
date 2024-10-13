@@ -1,9 +1,38 @@
-import argparse
 import os
+import datetime
+import argparse
 import xml.etree.ElementTree as ET
 import winreg
 import re
 import configparser
+import requests
+
+# Error codes mapping (fixed codes for documentation purposes)
+ERROR_CODES = {
+    "MISSING_XML_FOLDER": "x2910",
+    "INVALID_PARAM": "x3902",
+    "BATCH_FILE_MISSING": "x9338",
+    "CNF_FILE_MISSING": "x1010",
+    "COMMANDS_SECTION_MISSING": "x2020",
+    "PERMISSION_ERROR": "x4030",
+    "PATH_CLEAN_FAIL": "x2010"
+}
+
+def log_error(error_message, error_code):
+    """Log error messages to both the console and a file using UTF-8 encoding"""
+    log_directory = r"C:\Windows\Software\QORE\log"
+    os.makedirs(log_directory, exist_ok=True)  # Ensure the log directory exists
+    log_file = os.path.join(log_directory, "error_log.txt")
+
+    timestamp = datetime.datetime.now().strftime(r"%Y-%m-%d %H:%M:%S")
+    log_message = f"[{timestamp}] ERROR {error_code}: {error_message}"
+    
+    # Print the error message to the console
+    print(f"Err: Không khả dụng, kiểm tra mã lỗi - {error_code}")
+
+    # Write the error message to the log file using UTF-8 encoding
+    with open(log_file, "a", encoding="utf-8") as file:
+        file.write(log_message + "\n")
 
 def load_command_descriptions():
     r"""Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
@@ -11,17 +40,16 @@ def load_command_descriptions():
     cnf_path = r'C:\Windows\Software\QORE\env\cnf.ini'
 
     if os.path.exists(cnf_path):
-        # Đọc tệp với mã hóa utf-8
         with open(cnf_path, 'r', encoding='utf-8') as configfile:
             config.read_file(configfile)
         
         if 'commands' in config:
             return config['commands']
         else:
-            print("Err: Không tìm thấy phần 'commands' trong tệp cnf.ini")
+            log_error("Không tìm thấy phần 'commands' trong tệp cnf.ini", ERROR_CODES["COMMANDS_SECTION_MISSING"])
             return {}
     else:
-        print(f"Err: Không tìm thấy tệp cnf.ini tại {cnf_path}")
+        log_error(f"Không tìm thấy tệp cnf.ini tại {cnf_path}", ERROR_CODES["CNF_FILE_MISSING"])
         return {}
 
 def is_valid_name(name):
@@ -39,7 +67,7 @@ def parse_xml(file_path):
     dat_path = root.find('DatFilePath').text if root.find('DatFilePath') is not None else 'N/A'
 
     # Tạo đường dẫn tới file .bat trong thư mục 'cmd'
-    dat_path = os.path.join(r'C:\Windows\Software\QORE\cmd', os.path.basename(dat_path))  # Chỉ giữ tên file và ghép với đường dẫn cmd
+    dat_path = os.path.join(r'C:\Windows\Software\QORE\cmd', os.path.basename(dat_path))  # Raw string to avoid warnings
     
     return name, description, dat_path
 
@@ -49,7 +77,7 @@ def get_names_from_xml_folder():
     names = {}
 
     if not os.path.exists(xml_folder):
-        print(f"Err: Thư mục {xml_folder} không tồn tại. (x2910)")
+        log_error(f"Thư mục {xml_folder} không tồn tại.", ERROR_CODES["MISSING_XML_FOLDER"])
         return names
 
     # In ra danh sách các tệp XML được tìm thấy trong thư mục
@@ -64,9 +92,9 @@ def get_names_from_xml_folder():
                     valid_name = name.lower().replace('-', '_')
                     names[valid_name] = (description, dat_path)  # Lưu Name, Description và đường dẫn file .bat tương ứng
                 else:
-                    print(f"Err: Tham số '{name}' không hợp lệ, bỏ qua file {xml_file} với tham số là '{name}'. Mã: [x3902]")
+                    log_error(f"Tham số '{name}' không hợp lệ, bỏ qua file {xml_file}.", ERROR_CODES["INVALID_PARAM"])
             except Exception as e:
-                print(f"Err: Không thể xử lý tệp XML. Lỗi: {e}")
+                log_error(f"Không thể xử lý tệp XML {xml_file}. Lỗi: {e}", ERROR_CODES["INVALID_PARAM"])
     return names
 
 def run_bat_from_name(dat_file, custom_string=None):
@@ -80,7 +108,7 @@ def run_bat_from_name(dat_file, custom_string=None):
         else:
             os.system(f'call "{full_path}"')
     else:
-        print(f"Err: File .bat {full_path} không tồn tại (x9338)")
+        log_error(f"File .bat {full_path} không tồn tại", ERROR_CODES["BATCH_FILE_MISSING"])
 
 def print_command_help(names_from_xml, command_descriptions):
     """In ra danh sách tất cả các lệnh với mô tả từ tệp cnf.ini"""
@@ -120,7 +148,7 @@ def set_system_environment():
             else:
                 print(f"QORE đã tồn tại trong PATH")
     except PermissionError:
-        print("Lỗi: Bạn cần quyền quản trị để thay đổi biến môi trường hệ thống.")
+        log_error("Bạn cần quyền quản trị để thay đổi biến môi trường hệ thống.", ERROR_CODES["PERMISSION_ERROR"])
 
 def clean_path():
     """Làm sạch biến PATH trong Registry"""
@@ -130,7 +158,7 @@ def clean_path():
             clean_path = current_path.replace(';;', ';').rstrip(';') + ';'
             winreg.SetValueEx(key, 'Path', 0, winreg.REG_EXPAND_SZ, clean_path)
     except PermissionError:
-        print("Err: Clear Fail (x2010)")
+        log_error("Clear Fail.", ERROR_CODES["PATH_CLEAN_FAIL"])
 
 def main():
     # Lấy mô tả các lệnh từ tệp cnf.ini
@@ -140,10 +168,10 @@ def main():
     names_from_xml = get_names_from_xml_folder()
 
     # Tạo đối tượng ArgumentParser
-    parser = argparse.ArgumentParser(description="QORE - Ứng dụng CLI cho quản lý và tự động hóa tác vụ.")
+    parser = argparse.ArgumentParser(description=r"QORE - Ứng dụng CLI cho quản lý và tự động hóa tác vụ.")
     
     # Thêm tùy chọn -version để hiển thị phiên bản ứng dụng
-    parser.add_argument('-version', action='version', version='App 1.0')
+    parser.add_argument('-version', action='version', version='QORE 1.0.1 Updated (GMT +7) 11:40 13/10/2024')
     
     # Thêm tùy chọn -list để in ra danh sách Name và Description
     parser.add_argument('-list', action='store_true', help="Duyệt và in thông tin từ các file XML")
@@ -153,6 +181,11 @@ def main():
 
     # Thêm tùy chọn -set-env để thiết lập biến môi trường hệ thống
     parser.add_argument('-set-env', action='store_true', help="Thiết lập biến môi trường QORE để gọi từ CMD")
+    
+    parser.add_argument('-notification', action='store_true', help="Thông Báo")
+    
+    # Thêm tùy chọn -log-update để thiết lập biến môi trường hệ thống
+    parser.add_argument('-changelog', action='store_true', help="Thông tin cập nhật")
     
     # Thêm tùy chọn tự động dựa trên thẻ 'Name' từ XML
     for name in names_from_xml.keys():
@@ -169,6 +202,20 @@ def main():
     if args.set_env:
         set_system_environment()
         clean_path()
+    
+    
+    if args.changelog:
+        url = "https://raw.githubusercontent.com/Nyakkon/Simulator-CLI/main/changelog.txt"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Check for request errors
+
+            # Print the content of the changelog
+            print(response.text)
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching the changelog: {e}")
+            
+    url = "https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Log_error/log.txt"
 
     # Nếu -list được cung cấp, in ra danh sách Name và Description từ XML
     if args.list:
