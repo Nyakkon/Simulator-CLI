@@ -13,6 +13,7 @@ Simulator-CLI is an open-source command-line interface tool designed for automat
 ## 🌟 Code Links
 - [Check the code](https://github.com/Nyakkon/Simulator-CLI/blob/main/main.py)
 - [Declaration of Rights and Responsibilities](https://github.com/Nyakkon/Simulator-CLI/blob/main/Document/Declaration%20of%20Rights%20and%20Responsibilities.md)
+- [DOWNLOAD](https://github.com/Nyakkon/Simulator-CLI/releases/download/1.0.0/Simulator-CLI.ver.1.0.0.zip)
 
 ---
 
