@@ -214,10 +214,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# Lỗi ghi nhận:
-# PS D:\Users\Desktop\Testing\Develop\Qore> python main.py -add_command -command_name test111 -command_sub abc def -description "Lệnh kiểm tra" -bat abc.bat def.bat
-# D:\Users\Desktop\Testing\Develop\Qore\main.py:9: SyntaxWarning: invalid escape sequence '\W'
-#   """Đọc các định nghĩa lệnh từ tệp C:\Windows\Software\QORE\env\cnf.ini"""
-# usage: main.py [-h] [-version] [-list] [-fix-problem] [-set-env] [-interface] [-map_wk]
-# main.py: error: unrecognized arguments: -add_command -command_name test111 -command_sub abc def -description Lệnh kiểm tra -bat abc.bat def.bat
