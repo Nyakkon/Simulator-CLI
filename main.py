@@ -30,7 +30,7 @@ def is_valid_name(name):
     return re.match(r'^[a-zA-Z0-9\-_]+$', name) is not None
 
 def parse_xml(file_path):
-    """Đọc file XML và trả về Name, Description, và đường dẫn file .bat"""
+    """Đọc file XML và trả về Name, Description, DatFilePath, và Type"""
     tree = ET.parse(file_path)
     root = tree.getroot()
 
@@ -38,11 +38,17 @@ def parse_xml(file_path):
     name = root.find('Name').text if root.find('Name') is not None else 'N/A'
     description = root.find('Description').text if root.find('Description') is not None else 'N/A'
     dat_path = root.find('DatFilePath').text if root.find('DatFilePath') is not None else 'N/A'
+    file_type = root.find('Type').text if root.find('Type') is not None else '0'  # Default to Type 0 if not found
 
     # Tạo đường dẫn tới file .bat trong thư mục 'cmd'
     dat_path = os.path.join(r'C:\Windows\Software\QORE\cmd', dat_path)  # Đường dẫn tuyệt đối tới 'cmd'
+
+    # Xử lý logic cho Type
+    if file_type == '1':
+        name = f"{name}.py -test\"hjghksfdc\""
     
     return name, description, dat_path
+
 
 def get_names_from_xml_folder():
     """Duyệt qua các file XML trong thư mục 'XML' và trả về danh sách các tên từ thẻ 'Name'"""
